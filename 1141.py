@@ -5,7 +5,29 @@ from bisect import bisect_left, bisect_right
 from io import BytesIO, IOBase
 
 def solve():
-    pass
+    n = int(input())
+    array = list(map(int, input().split()))
+    check = set()
+    start = 0
+    end = 0
+    result = 1
+    while end < n:
+        if array[end] not in check:
+            check.add(array[end])
+            end += 1
+        else:
+            result = max(result, end - start)
+            while True:
+                check.remove(array[start])
+                if array[start] == array[end]:
+                    start += 1
+                    break
+                start += 1
+
+    
+    return max(result, end - start)
+
+
 
 def main():
     print(solve())

@@ -5,7 +5,44 @@ from bisect import bisect_left, bisect_right
 from io import BytesIO, IOBase
 
 def solve():
-    pass
+    n, m = map(int, input().split())
+    array = list(map(int, input().split()))
+    num_pos = [0] * (n + 1)
+    for i, num in enumerate(array):
+        num_pos[num] = i
+
+    count = 0
+    for ind, num in enumerate(array):
+        if num == 1 or num_pos[num - 1] > ind:
+            count += 1
+
+    result = []
+    for _ in range(m):
+        x, y = map(int, input().split())
+        if x > y:
+            x, y = y, x
+        x -= 1
+        y -= 1
+        if array[x] + 1 == array[y]:
+            count += 1
+        elif array[x] == array[y] + 1:
+            count -= 1
+        if array[x] - 1 > 0 and x < num_pos[array[x] - 1] < y:
+            count -= 1
+        if array[x] + 1 <= n and x < num_pos[array[x] + 1] < y:
+            count += 1
+        if array[y] - 1 > 0 and x < num_pos[array[y] - 1] < y:
+            count += 1
+        if array[y] + 1 <= n and x < num_pos[array[y] + 1] < y:
+            count -= 1
+
+        array[x], array[y] = array[y], array[x]
+        num_pos[array[x]] = x
+        num_pos[array[y]] = y
+        result.append(str(count))
+    return '\n'.join(result)
+
+
 
 def main():
     print(solve())
